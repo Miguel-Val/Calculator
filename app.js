@@ -10,6 +10,7 @@ function clearCalculator() {
     secondNumber = '';
     operator = '';
     output.textContent = '0';
+    output.style.fontSize = '60px';
 }
 
 function handleOperatorClick(op) {
@@ -20,6 +21,7 @@ function handleOperatorClick(op) {
         operator = op;
         isEnteringSecondNumber = true;
         output.textContent += ` ${op} `;
+        adjustFontSize();
         decimalPressed = false;
     }
 }
@@ -29,11 +31,13 @@ function handleNumberClick(digit) {
         if (firstNumber.length < 9) {
             firstNumber += digit;
             output.textContent = firstNumber;
+            adjustFontSize();
         }
     } else {
         if (secondNumber.length < 9) {
             secondNumber += digit;
             output.textContent = `${firstNumber} ${operator} ${secondNumber}`;
+            adjustFontSize();
         }
     }
 }
@@ -64,6 +68,19 @@ function operate() {
         secondNumber = '';
         isEnteringSecondNumber = false;
         operator = '';
+        adjustFontSize();
+    }
+}
+
+function adjustFontSize() {
+    const textLength = output.textContent.length;
+    if (textLength > 24) {
+        output.textContent = output.textContent.substring(0, 24);
+    }
+    if (textLength > 8) {
+        output.style.fontSize = '24px'; 
+    } else {
+        output.style.fontSize = '60px'; 
     }
 }
 
@@ -88,18 +105,22 @@ document.querySelector('.percentBtn').addEventListener('click', () => {
     if (firstNumber !== '' && !isEnteringSecondNumber) {
         firstNumber = (parseFloat(firstNumber) / 100).toString();
         output.textContent = firstNumber;
+        adjustFontSize();
     } else if (secondNumber !== '' && isEnteringSecondNumber) {
         secondNumber = (parseFloat(secondNumber) / 100).toString();
         output.textContent = `${firstNumber} ${operator} ${secondNumber}`;
+        adjustFontSize();
     }
 });
 document.querySelector('.posnegBtn').addEventListener('click', () => {
     if (firstNumber !== '' && !isEnteringSecondNumber) {
         firstNumber = (parseFloat(firstNumber) * -1).toString();
         output.textContent = firstNumber;
+        adjustFontSize();
     } else if (secondNumber !== '' && isEnteringSecondNumber) {
         secondNumber = (parseFloat(secondNumber) * -1).toString();
         output.textContent = `${firstNumber} ${operator} ${secondNumber}`;
+        adjustFontSize();
     }
 });
 document.querySelector('.decimalBtn').addEventListener('click', () => {
@@ -111,5 +132,6 @@ document.querySelector('.decimalBtn').addEventListener('click', () => {
         }
         output.textContent += '.';
         decimalPressed = true;
+        adjustFontSize();
     }
 });
